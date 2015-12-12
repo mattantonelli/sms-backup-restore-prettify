@@ -20,5 +20,5 @@ if !input.nil?
     end
   end
 else
-  puts 'usage: ruby sms_backup_prettify.rb input_file.xml (5555551234|5555551235)'
+  puts 'usage: ruby sms_backup_restore_prettify.rb input_file.xml (5555551234|5555551235)'
 end
