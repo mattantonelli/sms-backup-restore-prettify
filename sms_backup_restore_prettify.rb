@@ -7,16 +7,14 @@ input = ARGV[0]
 only_from = ARGV[1] || '.*'
 
 if !input.nil?
-  smses = File.open(input) { |f| Nokogiri::XML(f) }.xpath('//sms').each_with_object([]) do |sms, a|
-    a << { sender:  sms['type'] == '2' ? 'Me' : sms['contact_name'],
-           date:    sms['readable_date'],
-           message: sms['body'] } if sms['address'].gsub(/\D/, '').match(only_from)
-  end
+  File.open(input) { |f| Nokogiri::XML(f) }.xpath('//sms').each do |sms|
+    if sms['address'].gsub(/\D/, '').match(only_from)
+      sender = sms['type'] == '2' ? 'Me' : sms['contact_name']
+      date = sms['readable_date']
+      message = sms['body']
 
-  File.open('output.txt', 'w') do |output|
-    smses.each do |sms|
-      output.puts("#{sms[:sender]} [#{sms[:date]}]")
-      output.puts("#{sms[:message]}\n\n")
+      puts("#{sender} [#{date}]")
+      puts("#{message}\n\n")
     end
   end
 else
